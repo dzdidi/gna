@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+if ! [ -x "$(command -v nak)" ]; then
+  echo 'Error: nak is not installed.' >&2
+  echo 'Please install nak from https://github.com/fiatjaf/nak/tree/master'
+fi
+
 HOOK=`cat <<'EOF'
 #!/bin/sh\n
 \n
@@ -36,11 +41,6 @@ fi
 
 read -p "Provide path to git repository or press \"Enter\" to use curent directory:" GIT_REPO
 GIT_REPO=${GIT_REPO:-.}
-
-if [ ! -d $GIT_REPO ]; then
-  echo "$GIT_REPO is not a directory. Exiting..."
-  exit 1
-fi
 
 if [ ! -d "$GIT_REPO/.git" ]; then
   echo "$GIT_REPO is not a directory. Exiting..."
