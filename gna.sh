@@ -16,7 +16,7 @@ privKey=$(cat ~/.nostr/key | jq -r '.private_key')\n
 EVENT="{\"content\":\"\",\"kind\":27235,\"created_at\":$(date +%s),\"tags\":[[\"u\",\"$url\"],[\"method\",\"push\"],[\"payload\",\"$commit\"]]}"\n
 SIGNED=$(echo -n $EVENT | nak event -sec $privKey)\n
 NOSTR_AUTH_HEADER=$(echo -n $SIGNED | base64 -w 0)\n
-git config http.$url.extraHeader "Authorization: Nostr $NOSTR_AUTH_HEADER"\n
+git config http.$url.extraHeader "X-Authorization: Nostr $NOSTR_AUTH_HEADER"\n
 EOF
 `
 
