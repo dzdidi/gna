@@ -4,7 +4,6 @@ Requires [nak](https://github.com/fiatjaf/nak/tree/master)
 
 1. add `./gna` to you `$PATH`
 2. run `gna` and follow instructions
-Have nsec ready
 
 # Sever
 TODO:

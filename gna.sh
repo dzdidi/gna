@@ -10,7 +10,6 @@ HOOK=`cat <<'EOF'
 #!/bin/sh\n
 \n
 url="$2"\n
-zero=$(git hash-object --stdin </dev/null | tr '[0-9a-f]' '0')\n
 commit=$(git rev-parse HEAD)\n
 privKey=$(cat ~/.nostr/key | jq -r '.private_key')\n
 EVENT="{\"content\":\"\",\"kind\":27235,\"created_at\":$(date +%s),\"tags\":[[\"u\",\"$url\"],[\"method\",\"push\"],[\"payload\",\"$commit\"]]}"\n
