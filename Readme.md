@@ -5,9 +5,6 @@ Requires [nak](https://github.com/fiatjaf/nak/tree/master)
 1. add `./gna` to you `$PATH`
 2. run `gna` and follow instructions
 
-## TODO:
-- [ ] store keys in secure env
-
 # Sever
 ## TODO:
 - [ ] inteceptor of `X-Authorization`
