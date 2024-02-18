@@ -11,6 +11,11 @@ if ! [ -x "$(command -v jq)" ]; then
   echo 'Please install jq from https://stedolan.github.io/jq/download/'
 fi
 
+if ! [ -x "$(command -v awk)" ]; then
+  echo 'Error: awk is not installed.' >&2
+  echo 'Please install awk from https://www.gnu.org/software/gawk/'
+fi
+
 if ! [ -x "$(command -v pass)" ]; then
   echo 'Error: pass is not installed.' >&2
   echo 'Please install pass from https://www.passwordstore.org/'
