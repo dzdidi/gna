@@ -1,8 +1,9 @@
 # Client
 
-Requires [nak](https://github.com/fiatjaf/nak/tree/master)
-Requires [jq](https://stedolan.github.io/jq/tree/master)
-Requires [awk](https://www.gnu.org/software/gawk)
+Requires
+* [nak](https://github.com/fiatjaf/nak/tree/master)
+* [jq](https://stedolan.github.io/jq/tree/master)
+* [awk](https://www.gnu.org/software/gawk)
 
 1. add `./gna` to you `$PATH`
 2. run `gna` and follow instructions
