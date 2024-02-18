@@ -34,14 +34,19 @@ fi
 
 HOOK=`cat <<'EOF'
 #!/bin/sh\n
+COMMIT=$(git rev-parse HEAD)\n
 \n
-url="$2"\n
-commit=$(git rev-parse HEAD)\n
-privKey=$(pass PASS_PATH)\n
-EVENT="{\"content\":\"\",\"kind\":27235,\"created_at\":$(date +%s),\"tags\":[[\"u\",\"$url\"],[\"method\",\"push\"],[\"payload\",\"$commit\"]]}"\n
-SIGNED=$(echo -n $EVENT | nak event -sec $privKey)\n
-NOSTR_AUTH_HEADER=$(echo -n $SIGNED | base64 -w 0)\n
-git config http.$url.extraHeader "X-Authorization: Nostr $NOSTR_AUTH_HEADER"\n
+URLS=$(git remote -v | awk '/\(fetch\)/ {print $2} /\(push\)/ {print $3}' | awk -F' ' '{for(i=1;i<=NF;i++) if($i ~ /http/) print $i}')\n
+\n
+for url in $URLS; do\n
+  privKey=$(pass PASS_PATH)\n
+ EVENT="{\"content\":\"\",\"kind\":27235,\"created_at\":$(date +%s),\"tags\":[[\"u\",\"$url\"],[\"method\",\"push\"],[\"payload\",\"$COMMIT\"]]}"\n
+\n
+ SIGNED=$(echo -n $EVENT | nak event -sec $privKey)\n
+ NOSTR_AUTH_HEADER=$(echo -n $SIGNED | base64 -w 0)\n
+ git config http.$url.extraHeader "X-Authorization: Nostr $NOSTR_AUTH_HEADER"\n
+done\n
+\n
 EOF
 `
 PASS_PATH=$(sed 's/\//\\\//g' <<< "$PASS_PATH")
@@ -49,12 +54,12 @@ PATTERN="s/PASS_PATH/$PASS_PATH/g"
 HOOK=$(sed "$PATTERN" <<< "$HOOK")
 
 echo "Installing git hooks..."
-if [ -f "$GIT_REPO/.git/hooks/pre-push" ]; then
-  echo "pre-push hook already exists. Skipping..."
+if [ -f "$GIT_REPO/.git/hooks/post-commit" ]; then
+  echo "post-commit hook already exists. Skipping..."
 else
-  echo "Installing pre-push hook..."
-  echo -e $HOOK >> $GIT_REPO/.git/hooks/pre-push
-  chmod +x $GIT_REPO/.git/hooks/pre-push
+  echo "Installing post-commit hook..."
+  echo -e $HOOK >> $GIT_REPO/.git/hooks/post-commit
+  chmod +x $GIT_REPO/.git/hooks/post-commit
 fi
 
 echo "Done!"
