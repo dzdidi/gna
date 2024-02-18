@@ -16,9 +16,9 @@ if ! [ -x "$(command -v awk)" ]; then
   echo 'Please install awk from https://www.gnu.org/software/gawk/'
 fi
 
-if ! [ -x "$(command -v pass)" ]; then
-  echo 'Error: pass is not installed.' >&2
-  echo 'Please install pass from https://www.passwordstore.org/'
+if ! [ -x "$(command -v age)" ]; then
+  echo 'Error: age is not installed.' >&2
+  echo 'Please install age from https://github.com/FiloSottile/age'
 fi
 
 echo "Please insert you NSEC:"
@@ -26,8 +26,10 @@ read -s SK
 DECODED=$(nak decode $SK)
 PUBLIC_KEY=$(echo $DECODED | jq -r .pubkey)
 PRIVATE_KEY=$(echo $DECODED | jq -r .private_key)
-PASS_PATH="nostr/$PUBLIC_KEY"
-{ echo $PRIVATE_KEY ; echo $PRIVATE_KEY ; } | pass insert $PASS_PATH
+mkdir -p ~/.nostr
+PASS_PATH="~/.nostr/$PUBLIC_KEY"
+
+echo $PRIVATE_KEY | age -e -o ~/.nostr/$PUBLIC_KEY -R ~/.ssh/id_rsa.pub -i ~/.ssh/id_rsa
 
 read -p "Provide path to git repository or press \"Enter\" to use curent directory:" GIT_REPO
 GIT_REPO=${GIT_REPO:-.}
@@ -44,7 +46,7 @@ COMMIT=$(git rev-parse HEAD)\n
 URLS=$(git remote -v | awk '/\(fetch\)/ {print $2} /\(push\)/ {print $3}' | awk -F' ' '{for(i=1;i<=NF;i++) if($i ~ /http/) print $i}')\n
 \n
 for url in $URLS; do\n
-  privKey=$(pass PASS_PATH)\n
+  privKey=$(age -d -i ~/.ssh/id_rsa PASS_PATH)\n
  EVENT="{\"content\":\"\",\"kind\":27235,\"created_at\":$(date +%s),\"tags\":[[\"u\",\"$url\"],[\"method\",\"push\"],[\"payload\",\"$COMMIT\"]]}"\n
 \n
  SIGNED=$(echo -n $EVENT | nak event -sec $privKey)\n

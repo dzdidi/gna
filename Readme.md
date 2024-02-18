@@ -1,6 +1,7 @@
 # Client
 
 Requires
+* [age](https://github.com/FiloSottile/age)
 * [nak](https://github.com/fiatjaf/nak/tree/master)
 * [jq](https://stedolan.github.io/jq/tree/master)
 * [awk](https://www.gnu.org/software/gawk)
