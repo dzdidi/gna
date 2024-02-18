@@ -21,6 +21,16 @@ if ! [ -x "$(command -v age)" ]; then
   echo 'Please install age from https://github.com/FiloSottile/age'
 fi
 
+if ! [ -x "$(command -v ssh-keygen)" ]; then
+  echo 'Error: ssh-keygen is not installed.' >&2
+  echo 'Please install ssh-keygen from https://www.openssh.com/'
+fi
+
+if ! [ -f ~/.ssh/id_rsa ]; then
+  echo "Generating ssh key..."
+  ssh-keygen -t rsa -b 4096 -f ~/.ssh/id_rsa -N ""
+fi
+
 echo "Please insert you NSEC:"
 read -s SK
 DECODED=$(nak decode $SK)

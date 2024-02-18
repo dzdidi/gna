@@ -1,6 +1,7 @@
 # Client
 
 Requires
+* [ssh-keygen](https://www.openssh.com)
 * [age](https://github.com/FiloSottile/age)
 * [nak](https://github.com/fiatjaf/nak/tree/master)
 * [jq](https://stedolan.github.io/jq/tree/master)
